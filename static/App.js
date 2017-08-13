@@ -41,7 +41,7 @@ var IssueRow = function IssueRow(_ref) {
 		React.createElement(
 			'td',
 			null,
-			issue.id
+			issue._id
 		),
 		React.createElement(
 			'td',
@@ -82,7 +82,7 @@ var IssueTable = function IssueTable(_ref2) {
 
 	//issues为[]时,不会render IssueRow
 	var issueRows = issues.map(function (issue) {
-		return React.createElement(IssueRow, { key: issue.id, issue: issue });
+		return React.createElement(IssueRow, { key: issue._id, issue: issue });
 	});
 	return React.createElement(
 		'table',
@@ -253,20 +253,26 @@ var IssueList = function (_React$Component3) {
 			var _this5 = this;
 
 			fetch('/api/issues').then(function (response) {
-				return response.json();
-			}).then(function (data) {
-				//console.log(data.records[0].created);
-				console.log('Total count of records:', data._metadata.total_count);
-				data.records.forEach(function (issue) {
-					//为什么Date需要转换?
-					//因为经过了json()的转换，Date对象转变为string
-					//需要再转换为对象来调用toDateString();
-					issue.created = new Date(issue.created);
-					if (issue.completionDate) {
-						issue.completionDate = new Date(issue.completionDate);
-					}
-				});
-				_this5.setState({ issues: data.records });
+				if (response.ok) {
+					response.json().then(function (data) {
+						//console.log(data.records[0].created);
+						console.log('Total count of records:', data._metadata.total_count);
+						data.records.forEach(function (issue) {
+							//为什么Date需要转换?
+							//因为经过了json()的转换，Date对象转变为string
+							//需要再转换为对象来调用toDateString();
+							issue.created = new Date(issue.created);
+							if (issue.completionDate) {
+								issue.completionDate = new Date(issue.completionDate);
+							}
+						});
+						_this5.setState({ issues: data.records });
+					});
+				} else {
+					response.json().then(function (error) {
+						alert('Failed to fetch issues:' + error.message);
+					});
+				}
 			}).catch(function (err) {
 				return console.log(err);
 			});

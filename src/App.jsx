@@ -9,7 +9,7 @@ class IssueFilter extends React.Component {
 }
 const IssueRow = ({issue}) => (
 			<tr>
-				<td>{issue.id}</td>
+				<td>{issue._id}</td>
 				<td>{issue.status}</td>
 				<td>{issue.owner}</td>
 				<td>{issue.created.toDateString()}</td>
@@ -26,7 +26,7 @@ const IssueTable = ({issues}) => {
 	
 		//issues为[]时,不会render IssueRow
 		const issueRows = issues.map(
-			issue => <IssueRow key={issue.id} issue={issue}/>)
+			issue => <IssueRow key={issue._id} issue={issue}/>)
 		return (
 			<table className="bordered-table">
 				<thead>
@@ -131,22 +131,32 @@ class IssueList extends React.Component {
 	}
 	loadData() {
 		fetch('/api/issues')
-		.then(response => response.json())
-		.then(data => {
-			//console.log(data.records[0].created);
-			console.log('Total count of records:',data._metadata.total_count)
-			data.records.forEach(issue => {
-				//为什么Date需要转换?
-				//因为经过了json()的转换，Date对象转变为string
-				//需要再转换为对象来调用toDateString();
-				issue.created = new Date(issue.created);
-				if(issue.completionDate) {
-					issue.completionDate = new Date(issue.completionDate);
-				}
-			});
+		.then(response => {
+			if(response.ok) {
+				response.json()
+				.then(data => {
+					//console.log(data.records[0].created);
+					console.log('Total count of records:',data._metadata.total_count)
+					data.records.forEach(issue => {
+						//为什么Date需要转换?
+						//因为经过了json()的转换，Date对象转变为string
+						//需要再转换为对象来调用toDateString();
+						issue.created = new Date(issue.created);
+						if(issue.completionDate) {
+							issue.completionDate = new Date(issue.completionDate);
+						}
+					});
 			this.setState({issues:data.records});
+		});
+			} else {
+				response.json().then(error => {
+					alert('Failed to fetch issues:' + error.message)
+				})
+			}
+			
 		}).catch(err => console.log(err));
 	}
+		
 
 	render() {
 		console.log('render time')
