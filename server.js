@@ -51,7 +51,6 @@ const validIssueStatus = {
 	Closed: true,
 }
 const issueFieldType = {
-	id: 'required',
 	status: 'required',
 	owner: 'required',
 	effort: 'optional',
@@ -76,19 +75,31 @@ function validateIssue(issue) {
 }
 app.post('/api/issues', (req, res) => {
 	const newIssue = req.body;
-	newIssue.id = issues.length + 1;
 	newIssue.created = new Date();
-	if (!newIssue.status) {
+	if (!newIssue.status)
 		newIssue.status = 'New';
-	}
-	const err = validateIssue(newIssue);
+	const err = validateIssue(newIssue)
 	if (err) {
 		res.status(422).json({
-			message: `Invalid request : ${err}`
+			message: `Invalid request: ${err}`
 		});
-		return null;
+		return;
 	}
-	issues.push(newIssue);
-	res.json(newIssue); // = JSON.stringify() + res.send()
+	db.collection('issues').insertOne(newIssue).then(result =>
+		//下面是自己定义_id,自己传递回这个对象
+		// result.ops[0]._id = 1;
+		// console.log(result.ops[0]);
+		// return result.ops[0];
 
-})
+		db.collection('issues').find({
+			_id: result.insertedId
+		}).limit(1).next() //limit(1)作用是啥
+	).then(newIssue => {
+		res.json(newIssue);
+	}).catch(error => {
+		console.log(error);
+		res.status(500).json({
+			message: `Internal Server Error: ${error}`
+		});
+	});
+});
