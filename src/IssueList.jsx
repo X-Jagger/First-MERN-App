@@ -1,6 +1,7 @@
 import IssueAdd from './IssueAdd.jsx';
 import IssueFilter from './IssueFilter.jsx';
-
+import React from 'react';
+import 'whatwg-fetch';
 const IssueRow = ({issue}) => (
 			<tr>
 				<td>{issue._id}</td>
@@ -17,7 +18,7 @@ const IssueRow = ({issue}) => (
 	
 
 const IssueTable = ({issues}) => {
-		console.log("test for rebuild by webpack")
+		//console.log("test for rebuild by webpack")
 		//issues为[]时,不会render IssueRow
 		const issueRows = issues.map(
 			issue => <IssueRow key={issue._id} issue={issue}/>)
@@ -67,7 +68,6 @@ export default class IssueList extends React.Component {
 				if(response.ok) {
 					response.json()
 			.then(updatedIssue => {
-				console.log(updatedIssue);
 				updatedIssue.created = new Date(updatedIssue.created);
 				if(updatedIssue.completionDate){
 					updatedIssue.completionDate = new Date(updatedIssue.completionDate);
@@ -123,7 +123,6 @@ export default class IssueList extends React.Component {
 		
 
 	render() {
-		console.log('render time')
 		return (
 			<div>
 			<h1>Issue Tracker</h1>

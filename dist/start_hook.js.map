@@ -1,0 +1,1 @@
+{"version":3,"sources":["../server/start_hook.js"],"names":["require","presets"],"mappings":";;AAAA;AACAA,QAAQ,gBAAR,EAA0B;AACzBC,UAAS,CAAC,aAAD;AADgB,CAA1B;AAGAD,QAAQ,aAAR","file":"start_hook.js","sourcesContent":["//实时转码\r\nrequire('babel-register')({\r\n\tpresets: ['es2015-node']\r\n});\r\nrequire('./server.js');"]}
