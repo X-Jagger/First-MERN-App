@@ -95,8 +95,22 @@ export default class IssueList extends React.Component {
 		//console.log("componentDidMount");
 		this.loadData();
 	}
+	componentDidUpdate(prevProps) {
+		// console.log('prevProps is !! ',prevProps.location)
+		const oldQuery = new URLSearchParams(prevProps.location.search);
+		const newQuery = new URLSearchParams(this.props.location.search);
+		// console.log("oldQuery,newQuery is :",oldQuery.get('satus'),newQuery.get('status'))
+		if (oldQuery.get('status') === newQuery.get('status')) {
+			return;
+		} else {
+			this.loadData();
+		}
+		
+	}
 	loadData() {
-		fetch('/api/issues')
+		// console.log('location is : ',this.props.location);
+		// console.log('props is : ',this.props);
+		fetch(`/api/issues${this.props.location.search}`)
 		.then(response => {
 			if(response.ok) {
 				response.json()

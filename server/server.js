@@ -29,7 +29,12 @@ MongoClient.connect('mongodb://localhost/issuetracker')
 	})
 
 app.get('/api/issues', (req, res) => {
-	db.collection('issues').find().toArray().then(issues => {
+	const filter = {};
+	console.log('GET!!!:');
+	if (req.query.status) {
+		filter.status = req.query.status;
+	}
+	db.collection('issues').find(filter).toArray().then(issues => {
 		const metadata = {
 			total_count: issues.length
 		};

@@ -1,8 +1,9 @@
 import 'babel-polyfill'
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {HashRouter as Router,Route,Redirect} from 'react-router-dom';
+import {HashRouter as Router,Route,Redirect,Switch} from 'react-router-dom';
 //BrowerHistory
+//Switch render 第一个match的route
 import IssueList from './IssueList.jsx';
 import IssueEdit from './IssueEdit.jsx';
 
@@ -10,11 +11,13 @@ const contentNode = document.getElementById('contents');
 const NoMatch = () => <p>Page Not Found </p>
 const RoutedApp = () => (
 	<Router>
-		<div>
+		<div> 
 		<Redirect from="/" to="/issues" />
-		<Route path="/issues" component={IssueList}/>
-		<Route path="/issues/:id" component={IssueEdit}/>
+		<Switch>
+		<Route exact path="/issues" component={IssueList}/>
+		<Route exact path="/issues/:id" component={IssueEdit}/>
 		<Route path="*" component={NoMatch}/>
+		</Switch>
 		</div>
 	</Router>
 	)
