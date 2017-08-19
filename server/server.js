@@ -6,14 +6,15 @@ import {
 import Issue from './issue.js';
 import 'babel-polyfill';
 import SourceMapSupport from 'source-map-support';
+import path from 'path';
+
 const app = express(); //实例化一个应用
 app.use(express.static('static'));
 // parse application/x-www-form-urlencoded 
 app.use(bodyParser.urlencoded({
-	extended: false
-}))
-
-// parse application/json 
+		extended: false
+	}))
+	// parse application/json 
 app.use(bodyParser.json())
 
 let db;
@@ -27,6 +28,8 @@ MongoClient.connect('mongodb://localhost/issuetracker')
 	.catch(error => {
 		console.log('ERROR:', error);
 	})
+
+
 
 app.get('/api/issues', (req, res) => {
 	const filter = {};
@@ -51,6 +54,9 @@ app.get('/api/issues', (req, res) => {
 
 })
 
+app.get('*', (req, res) => {
+	res.sendFile(path.resolve('static/index.html'))
+})
 
 app.post('/api/issues', (req, res) => {
 	const newIssue = req.body;

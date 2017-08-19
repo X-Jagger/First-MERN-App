@@ -1,7 +1,7 @@
 import 'babel-polyfill'
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {HashRouter as Router,Route,Redirect,Switch,withRouter,Link} from 'react-router-dom';
+import {BrowserRouter as Router,Route,Redirect,Switch,withRouter,Link} from 'react-router-dom';
 //BrowerHistory
 //Switch render 第一个match的route
 import IssueList from './IssueList.jsx';
@@ -31,9 +31,8 @@ const Dashboard = () => (
 	)
 const RoutedApp = () => (
 	<Router >
-
 		<App>
-	
+	{/*<Redirect from="/" to="/issues"/>*/}
 			<Switch>
 			<Route exact path="/issues" component={withRouter(IssueList)}/>
 			<Route exact path="/issues/:id" component={IssueEdit}/>
