@@ -147,7 +147,6 @@ export default class IssueList extends React.Component {
 		//console.log('look for search:',this.props.history.push)
 		return (
 			<div>
-			<h1>Issue Tracker</h1>
 			<IssueFilter setFilter={this.setFilter}/>
 			<hr/>
 			<IssueTable issues={this.state.issues}/>
