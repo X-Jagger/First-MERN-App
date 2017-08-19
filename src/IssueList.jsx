@@ -3,6 +3,7 @@ import IssueFilter from './IssueFilter.jsx';
 import React from 'react';
 import 'whatwg-fetch';
 import {Link} from 'react-router-dom';
+import PropTypes from 'prop-types';
 const IssueRow = ({issue}) => (
 			<tr>
 				<td><Link to={`/issues/${issue._id}`}>
@@ -54,8 +55,12 @@ export default class IssueList extends React.Component {
 			issues:[]
 		};
 		this.loadData = this.loadData.bind(this);	
-		 this.createIssue = this.createIssue.bind(this);
+		this.createIssue = this.createIssue.bind(this);
+		this.setFilter = this.setFilter.bind(this);	
 	} 
+	setFilter(query) {
+		this.props.history.push({pathname:this.props.location.pathname,search:query})
+	}
 
 	createIssue(newIssue) {
 			fetch('/api/issues',{
@@ -102,9 +107,9 @@ export default class IssueList extends React.Component {
 		// console.log("oldQuery,newQuery is :",oldQuery.get('satus'),newQuery.get('status'))
 		if (oldQuery.get('status') === newQuery.get('status')) {
 			return;
-		} else {
+		} 
 			this.loadData();
-		}
+		
 		
 	}
 	loadData() {
@@ -139,10 +144,11 @@ export default class IssueList extends React.Component {
 		
 
 	render() {
+		//console.log('look for search:',this.props.history.push)
 		return (
 			<div>
 			<h1>Issue Tracker</h1>
-			<IssueFilter/>
+			<IssueFilter setFilter={this.setFilter}/>
 			<hr/>
 			<IssueTable issues={this.state.issues}/>
 			<hr/>
@@ -151,3 +157,7 @@ export default class IssueList extends React.Component {
 			)
 	}
 }	
+
+// IssueList.propTypes = {
+// 	router:PropTypes.object,
+// }
