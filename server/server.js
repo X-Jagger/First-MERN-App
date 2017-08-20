@@ -32,11 +32,23 @@ MongoClient.connect('mongodb://localhost/issuetracker')
 
 
 app.get('/api/issues', (req, res) => {
-	const filter = {};
-	console.log('GET!!!:');
-	if (req.query.status) {
-		filter.status = req.query.status;
-	}
+	const filter = {
+		$or: [{
+			effort: {
+				$exists: false
+			}
+		}, {}]
+	};
+	console.log("req.query :", req.query)
+	if (req.query.status) filter.status = req.query.status;
+	if (req.query.effort_lte || req.query.effort_gte) filter.$or[1] = {
+		effort: {}
+	};
+	if (req.query.effort_lte) filter.$or[1].effort.$lte =
+		parseInt(req.query.effort_lte, 10);
+	if (req.query.effort_gte) filter.$or[1].effort.$gte =
+		parseInt(req.query.effort_gte, 10);
+
 	db.collection('issues').find(filter).toArray().then(issues => {
 		const metadata = {
 			total_count: issues.length

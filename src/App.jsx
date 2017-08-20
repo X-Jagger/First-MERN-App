@@ -9,14 +9,18 @@ import IssueEdit from './IssueEdit.jsx';
 
 const contentNode = document.getElementById('contents');
 const NoMatch = () => <p>Page Not Found </p>
-const App = (props) => (
+const App = () => (
 	<div>
 		<div className="header">
 			<h1>Issue Tracker</h1>
 			
 		</div>
 		<div className="contents">
-		{props.children}
+			<Switch>
+				<Route exact path="/issues" component={withRouter(IssueList)}/>
+				<Route exact path="/issues/:id" component={IssueEdit}/>
+				<Route path="*" component={NoMatch}/>
+			</Switch>
 		</div>
 		<div className="footer">
 			Hello ,this is the footer.
@@ -26,19 +30,10 @@ const App = (props) => (
 // App.propTypes = {
 // 	children:PropTypes.object.isRequired;
 // }
-const Dashboard = () => (
-		<div>test for Dashboard</div>
-	)
+
 const RoutedApp = () => (
 	<Router >
-		<App>
-	{/*<Redirect from="/" to="/issues"/>*/}
-			<Switch>
-			<Route exact path="/issues" component={withRouter(IssueList)}/>
-			<Route exact path="/issues/:id" component={IssueEdit}/>
-			<Route path="*" component={NoMatch}/>
-			</Switch>
-		</App>
+		<App></App>
 	</Router>
 	)
 ReactDOM.render(<RoutedApp/>,contentNode); //instantiation实例
