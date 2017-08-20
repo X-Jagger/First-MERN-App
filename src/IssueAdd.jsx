@@ -17,7 +17,7 @@ export default class IssueAdd extends React.Component {
 		form.title.value = ''; 
 	}
 	render() {
-		console.log("test for Add Component!")
+		//console.log("test for Add Component!")
 		return (
 			<div>
 				<form name="issueAdd" onSubmit={this.handleSubmit}>

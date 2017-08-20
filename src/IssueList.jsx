@@ -4,6 +4,8 @@ import React from 'react';
 import 'whatwg-fetch';
 import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
+import queryString from 'query-string';
+
 const IssueRow = ({issue}) => (
 			<tr>
 				<td><Link to={`/issues/${issue._id}`}>
@@ -102,10 +104,13 @@ export default class IssueList extends React.Component {
 	}
 	componentDidUpdate(prevProps) {
 		// console.log('prevProps is !! ',prevProps.location)
-		const oldQuery = new URLSearchParams(prevProps.location.search);
-		const newQuery = new URLSearchParams(this.props.location.search);
-		// console.log("oldQuery,newQuery is :",oldQuery.get('satus'),newQuery.get('status'))
-		if (oldQuery.get('status') === newQuery.get('status')) {
+		const oldQuery = queryString.parse(prevProps.location.search);
+		const newQuery = queryString.parse(this.props.location.search);
+		//console.log("oldQuery,newQuery is :",oldQuery,newQuery);
+		if (oldQuery.status === newQuery.status
+			&& oldQuery.effort_gtz === newQuery.effort_gtz
+			&& oldQuery.effort_ltz === newQuery.effort_ltz
+			) {
 			return;
 		} 
 			this.loadData();
@@ -120,7 +125,7 @@ export default class IssueList extends React.Component {
 			if(response.ok) {
 				response.json()
 				.then(data => {
-					//console.log(data.records[0].created);
+					//console.log(datac.reords[0].created);
 					console.log('Total count of records:',data._metadata.total_count)
 					data.records.forEach(issue => {
 						//为什么Date需要转换?
@@ -145,9 +150,13 @@ export default class IssueList extends React.Component {
 
 	render() {
 		//console.log('look for search:',this.props.history.push)
+		//console.log('initFilter',this.props.location)
+		console.log('this.props:',this.props)
+		const initFilter =  queryString.parse(this.props.location.search)
 		return (
 			<div>
-			<IssueFilter setFilter={this.setFilter}/>
+			<IssueFilter setFilter={this.setFilter}
+			initFilter={initFilter}/>
 			<hr/>
 			<IssueTable issues={this.state.issues}/>
 			<hr/>
