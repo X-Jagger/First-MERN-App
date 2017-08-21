@@ -48,7 +48,7 @@ export default class IssueFilter extends React.Component {
 	}
 	onChangeEffortGte(e) {
 		const effortString = e.target.value;
-		console.log('value is :',effortString)
+		//console.log('value is :',effortString)
 		if (effortString.match(/^\d*$/)) {
 			this.setState({
 				effort_gte:`${e.target.value}`,
@@ -59,7 +59,7 @@ export default class IssueFilter extends React.Component {
 	onChangeEffortLte(e) {
 
 		const effortString = e.target.value;
-		console.log('value is :',effortString)
+		//console.log('value is :',effortString)
 		if (effortString.match(/^\d*$/)) {
 			this.setState({
 				effort_lte:e.target.value,
@@ -97,7 +97,7 @@ export default class IssueFilter extends React.Component {
 			<option value="Closed">Closed</option>
 			</select>
 			&nbsp; Effort between:
-			<input type="number" size={5} value={this.state.effort_gte}
+			<input type="number" sizes={5} value={this.state.effort_gte}
 			onChange={this.onChangeEffortGte}/>
 			&nbsp;-&nbsp;
 			<input type="number" size={5} value={this.state.effort_lte}

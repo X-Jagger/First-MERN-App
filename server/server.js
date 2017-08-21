@@ -1,7 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import {
-	MongoClient
+	MongoClient,
+	ObjectId
 } from 'mongodb';
 import Issue from './issue.js';
 import 'babel-polyfill';
@@ -29,9 +30,42 @@ MongoClient.connect('mongodb://localhost/issuetracker')
 		console.log('ERROR:', error);
 	})
 
+app.get('/api/issues/:id', (req, res) => {
+	//console.log("req.query :", req.query)
+	console.log("req.params :", req.params)
+	let issueId;
+	try {
+		issueId = new ObjectId(req.params.id)
+	} catch (error) {
+		res.status(422).json({
+			message: `Invalid issue ID format: ${error}`
+		});
+		return;
+	}
+	db.collection('issues').find({
+			_id: issueId
+		}).limit(1)
+		.next()
+		.then(issue => {
+			if (!issue) {
+				res.status(404).json({
+					message: `No such issue: ${issueId}`
+				})
+			} else {
+				res.json(issue);
+			}
+		})
+		.catch(error => {
+			console.log(error);
+			res.status(500).json({
+				message: `Internal Server Error: ${error}`
+			})
+		})
+})
 
 
 app.get('/api/issues', (req, res) => {
+	//console.log("app.get('/api/issues' is running");
 	const filter = {
 		$or: [{
 			effort: {
@@ -39,7 +73,7 @@ app.get('/api/issues', (req, res) => {
 			}
 		}, {}]
 	};
-	console.log("req.query :", req.query)
+
 	if (req.query.status) filter.status = req.query.status;
 	if (req.query.effort_lte || req.query.effort_gte)
 		filter.$or[1] = {
@@ -71,6 +105,7 @@ app.get('*', (req, res) => {
 	res.sendFile(path.resolve('static/index.html'))
 })
 
+
 app.post('/api/issues', (req, res) => {
 	const newIssue = req.body;
 	newIssue.created = new Date();
@@ -91,7 +126,7 @@ app.post('/api/issues', (req, res) => {
 
 		db.collection('issues').find({
 			_id: result.insertedId
-		}).limit(1).next() //limit(1)作用是啥
+		}).limit(1).next() //limit(1)作用是限制传回的文件数量
 	).then(newIssue => {
 		res.json(newIssue);
 	}).catch(error => {
