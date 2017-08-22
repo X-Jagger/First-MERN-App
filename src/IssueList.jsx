@@ -6,17 +6,11 @@ import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 
-class IssueRow extends React.Component {
-	constructor() {
-		super()
-		this.onDeleteClick = this.onDeleteClick.bind(this);
+const IssueRow = (props) => {
+	function onDeleteClick() {
+		props.deleteIssue(props.issue._id)
 	}
-	onDeleteClick() {
-		this.props.deleteIssue(this.props.issue._id)
-	}
-	render() {
-		console.log('IssueRow this.props:',this.props);
-	const issue = this.props.issue;
+	const issue = props.issue;
 	return (
 	<tr>
 		<td><Link to={`/issues/${issue._id}`}>
@@ -28,27 +22,20 @@ class IssueRow extends React.Component {
 		<td>{issue.completionDate ? 
 			issue.completionDate.toDateString() : ''}</td>
 		<td>{issue.title}</td>
-		<td><button onClick={this.onDeleteClick}>Delete</button></td>
+		<td><button onClick={onDeleteClick}>Delete</button></td>
 	</tr>	
-			)}
+			)
 } 
 // IssueRow.propTypes = {
 // 	issue: React.PropTypes.object.isRequired,
 // 	deleteIssue: React.PropTypes.func.isRequired,
 // };
-class IssueTable extends React.Component {
-	
-	render() {
-
-		const issues = this.props.issues;
-	
-// const IssueTable = ({issues}) => {
-		//console.log("test for rebuild by webpack")
+const IssueTable = (props) => {
+		const issues = props.issues;
 		//issues为[]时,不会render IssueRow
-		//console.log('IssueTable this.props:',this.props);
 		const issueRows = issues.map(issue => 
 			<IssueRow key={issue._id} issue={issue}
-			deleteIssue={this.props.deleteIssue} />)
+			deleteIssue={props.deleteIssue} />)
 		return (
 			<table className="bordered-table">
 				<thead>
@@ -68,7 +55,7 @@ class IssueTable extends React.Component {
 				</tbody>
 			</table>
 			
-			)}
+			)
 	}
 // IssueTable.propTypes = {
 // 	issues: React.PropTypes.array.isRequired,
