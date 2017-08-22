@@ -32,7 +32,7 @@ export default class NumInput extends React.Component {
 
 	//e.target.value必须是string,才有match方法
 	onChange(e) {
-		if(e.target.value.match(/^\d*$/)) {
+		if(Number(e.target.value) || e.target.value === '') {
 			this.setState({value:e.target.value})
 			
 		}
@@ -49,6 +49,7 @@ export default class NumInput extends React.Component {
 	render() {
 		// console.log("NumInput.this.props is :",this.props)
 		// console.log("NumInput.this.state is :",this.state)
+		console.log('NumInput ...this,')
 		return (
 			<input type="text"
 			{...this.props} value={this.state.value}

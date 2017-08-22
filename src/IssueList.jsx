@@ -6,27 +6,49 @@ import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 
-const IssueRow = ({issue}) => (
-			<tr>
-				<td><Link to={`/issues/${issue._id}`}>
-				{issue._id.substr(-4)}</Link></td>
-				<td>{issue.status}</td>
-				<td>{issue.owner}</td>
-				<td>{issue.created.toDateString()}</td>
-				<td>{issue.effort}</td>
-				<td>{issue.completionDate ? 
-					issue.completionDate.toDateString() : ''}</td>
-				<td>{issue.title}</td>
-
-			</tr>	
-			)
+class IssueRow extends React.Component {
+	constructor() {
+		super()
+		this.onDeleteClick = this.onDeleteClick.bind(this);
+	}
+	onDeleteClick() {
+		this.props.deleteIssue(this.props.issue._id)
+	}
+	render() {
+		console.log('IssueRow this.props:',this.props);
+	const issue = this.props.issue;
+	return (
+	<tr>
+		<td><Link to={`/issues/${issue._id}`}>
+		{issue._id.substr(-4)}</Link></td>
+		<td>{issue.status}</td>
+		<td>{issue.owner}</td>
+		<td>{issue.created.toDateString()}</td>
+		<td>{issue.effort}</td>
+		<td>{issue.completionDate ? 
+			issue.completionDate.toDateString() : ''}</td>
+		<td>{issue.title}</td>
+		<td><button onClick={this.onDeleteClick}>Delete</button></td>
+	</tr>	
+			)}
+} 
+// IssueRow.propTypes = {
+// 	issue: React.PropTypes.object.isRequired,
+// 	deleteIssue: React.PropTypes.func.isRequired,
+// };
+class IssueTable extends React.Component {
 	
+	render() {
 
-const IssueTable = ({issues}) => {
+		const issues = this.props.issues;
+	
+// const IssueTable = ({issues}) => {
 		//console.log("test for rebuild by webpack")
 		//issues为[]时,不会render IssueRow
-		const issueRows = issues.map(
-			issue => <IssueRow key={issue._id} issue={issue}/>)
+		//console.log('IssueTable this.props:',this.props);
+		const issueRows = issues.map(issue => 
+			<IssueRow key={issue._id} issue={issue}
+			deleteIssue={this.props.deleteIssue} />)
 		return (
 			<table className="bordered-table">
 				<thead>
@@ -38,6 +60,7 @@ const IssueTable = ({issues}) => {
 						<th>Effort</th>
 						<th>Completion Date</th>
 						<th>Title</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -45,9 +68,12 @@ const IssueTable = ({issues}) => {
 				</tbody>
 			</table>
 			
-			)
+			)}
 	}
-
+// IssueTable.propTypes = {
+// 	issues: React.PropTypes.array.isRequired,
+// 	deleteIssue: React.PropTypes.func.isRequired,
+// };
 
 
 export default class IssueList extends React.Component {
@@ -59,7 +85,18 @@ export default class IssueList extends React.Component {
 		this.loadData = this.loadData.bind(this);	
 		this.createIssue = this.createIssue.bind(this);
 		this.setFilter = this.setFilter.bind(this);	
+		this.deleteIssue = this.deleteIssue.bind(this);	
 	} 
+	deleteIssue(id) {
+		//console.log(id);
+		fetch(`/api/issues/${id}`,{
+			method:'DELETE'
+		}).then(response => {
+			if(!response.ok) alert ('Failed to delete issue')
+			else this.loadData();
+		});
+	}
+
 	setFilter(query) {
 		this.props.history.push({pathname:this.props.location.pathname,search:query})
 	}
@@ -102,6 +139,8 @@ export default class IssueList extends React.Component {
 		//console.log("componentDidMount");
 		this.loadData();
 	}
+
+	//因为有load data的动作，所以必须判断是否更新完毕，否则会一直loadData();
 	componentDidUpdate(prevProps) {
 		// console.log('prevProps is !! ',prevProps.location)
 		const oldQuery = queryString.parse(prevProps.location.search);
@@ -151,14 +190,14 @@ export default class IssueList extends React.Component {
 	render() {
 		//console.log('look for search:',this.props.history.push)
 		//console.log('initFilter',this.props.location)
-		console.log('this.props:',this.props)
+		console.log('IssueList this.props:',this.props)
 		const initFilter =  queryString.parse(this.props.location.search)
 		return (
 			<div>
 			<IssueFilter setFilter={this.setFilter}
 			initFilter={initFilter}/>
 			<hr/>
-			<IssueTable issues={this.state.issues}/>
+			<IssueTable issues={this.state.issues} deleteIssue={this.deleteIssue}/>
 			<hr/>
 			<IssueAdd createIssue={this.createIssue}/>
 			</div>

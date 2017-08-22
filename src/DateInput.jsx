@@ -66,8 +66,8 @@ export default class DateInput extends React.Component {
 		const value = (this.state.focused || !this.state.valid) 
 		? this.state.value : this.displayFormat(this.props.value);
 		//这里只能用displayFormat(this.props.value),因为它需要一个new Date()对象
-		console.log('DateInput this.props',this.props)
-		console.log('DateInput this.state',this.state)
+		//console.log('DateInput this.props',this.props)
+		//console.log('DateInput this.state',this.state)
 		return (
 			<input type="text" size={15} name={this.props.name}
 			className={className} value={value} 

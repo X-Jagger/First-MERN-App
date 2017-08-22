@@ -1,6 +1,6 @@
 const validIssueStatus = {
 	New: true,
-	open: true,
+	Open: true,
 	Assigned: true,
 	Fixed: true,
 	Verified: true,
@@ -13,6 +13,20 @@ const issueFieldType = {
 	created: 'required',
 	completionDate: 'optional',
 	title: 'required',
+}
+
+function convertIssue(issue) {
+	if (issue.created) issue.created = new Date(issue.created);
+	if (issue.completionDate) issue.completionDate = new Date(issue.completionDate);
+	return cleanupIssue(issue);
+}
+
+function cleanupIssue(issue) {
+	const cleanedUpIssue = {};
+	Object.keys(issue).forEach(field => {
+		if (issueFieldType[field]) cleanedUpIssue[field] = issue[field];
+	});
+	return cleanedUpIssue;
 }
 
 function validateIssue(issue) {
@@ -31,5 +45,7 @@ function validateIssue(issue) {
 }
 
 export default {
-	validateIssue: validateIssue
+	validateIssue,
+	cleanupIssue,
+	convertIssue,
 }
