@@ -75,7 +75,7 @@ app.put('/api/issues/:id', (req, res) => {
 		return;
 	}
 	const issue = req.body;
-	delete issue._id; //因为convertIssue没有转换ObjectId
+	delete issue._id; //因为下面的convertIssue没有转换ObjectId
 	const err = Issue.validateIssue(issue);
 	if (err) {
 		res.status(422).json({

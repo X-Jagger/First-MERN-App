@@ -5,6 +5,7 @@ import 'whatwg-fetch';
 import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
+import {Button,Glyphicon} from 'react-bootstrap';
 
 const IssueRow = (props) => {
 	function onDeleteClick() {
@@ -22,7 +23,7 @@ const IssueRow = (props) => {
 		<td>{issue.completionDate ? 
 			issue.completionDate.toDateString() : ''}</td>
 		<td>{issue.title}</td>
-		<td><button onClick={onDeleteClick}>Delete</button></td>
+		<td><Button bsSize="xsmall" onClick={onDeleteClick}><Glyphicon glyph="trash"/></Button></td>
 	</tr>	
 			)
 } 

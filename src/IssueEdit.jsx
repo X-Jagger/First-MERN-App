@@ -117,7 +117,7 @@ export default class IssueEdit extends React.Component {
 				<form onSubmit={this.onSubmit}>
 					ID:{issue._id}
 					<br/>
-					Created:{issue.created ? issue.created.toDateString() : ''}
+		V			Created:{issue.created ? issue.created.toDateString() : ''}
 					<br/>
 					Status: <select name="status" 
 					value={issue.status} 
