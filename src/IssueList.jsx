@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import {Button,Glyphicon,Table,Panel} from 'react-bootstrap';
-
+import IssueAdd from './IssueAdd.jsx';
 const IssueRow = (props) => {
 	function onDeleteClick() {
 		props.deleteIssue(props.issue._id)
