@@ -44,12 +44,12 @@ export default class NumInput extends React.Component {
 	//转化为num
 	unformat(str) {
 		const val = parseInt(str,10);
-		return isNaN(val) ? null : val;
+		return isNaN(val) ? 0 : val;
 	}
 	render() {
 		// console.log("NumInput.this.props is :",this.props)
 		// console.log("NumInput.this.state is :",this.state)
-		console.log('NumInput ...this,')
+		//console.log('NumInput ...this,')
 		return (
 			<input type="text"
 			{...this.props} value={this.state.value}

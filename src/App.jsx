@@ -6,14 +6,14 @@ import {BrowserRouter as Router,Route,Redirect,Switch,withRouter,Link} from 'rea
 //Switch render 第一个match的route
 import IssueList from './IssueList.jsx';
 import IssueEdit from './IssueEdit.jsx';
-import {LinkContainer} from 'react-router-bootstrap'
+import {LinkContainer} from 'react-router-bootstrap';
 import {Navbar,Nav,NavItem,NavDropdown,MenuItem,Glyphicon} from 'react-bootstrap'
 
 
 const contentNode = document.getElementById('contents');
 const NoMatch = () => <p>Page Not Found </p>
 const Header = () => (
-	<Navbar>
+	<Navbar fluid>
 		<Navbar.Header>
 			<Navbar.Brand>Issue Tracker</Navbar.Brand>
 		</Navbar.Header>
@@ -21,7 +21,7 @@ const Header = () => (
 					<LinkContainer to="/issues">
 						<NavItem>Issues</NavItem>
 					</LinkContainer>
-					<LinkContainer to="reports">
+					<LinkContainer to="/reports">
 						<NavItem>Reports</NavItem>
 					</LinkContainer>
 				</Nav>
@@ -32,10 +32,11 @@ const Header = () => (
 					</NavItem>
 					<NavDropdown id="user-dropdown" 
 					title={<Glyphicon glyph="option-horizontal"/>} > 
-					</NavDropdown>
-						<MenuItem>
+					<MenuItem>
 							Logout
 						</MenuItem>
+					</NavDropdown>
+						
 					
 				</Nav>
 			
@@ -51,12 +52,12 @@ const App = () => (
 				<Route exact path="/issues/:id" component={IssueEdit}/>
 				<Route path="*" component={NoMatch}/>
 			</Switch>
-		</div>
-		<hr/>
-		<h5><small><div className="footer">
-			Hello ,this is the footer.
-		</div></small></h5>
 		
+		<hr/>
+		<h5><small>
+			Hello ,this is the footer.
+		</small></h5>
+		</div>
 	</div>
 	)
 

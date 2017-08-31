@@ -1,11 +1,10 @@
-import IssueAdd from './IssueAdd.jsx';
 import IssueFilter from './IssueFilter.jsx';
 import React from 'react';
 import 'whatwg-fetch';
 import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
-import {Button,Glyphicon} from 'react-bootstrap';
+import {Button,Glyphicon,Table,Panel} from 'react-bootstrap';
 
 const IssueRow = (props) => {
 	function onDeleteClick() {
@@ -38,7 +37,7 @@ const IssueTable = (props) => {
 			<IssueRow key={issue._id} issue={issue}
 			deleteIssue={props.deleteIssue} />)
 		return (
-			<table className="bordered-table">
+			<Table bordered condensed hover responsive>
 				<thead>
 					<tr>
 						<th>Id</th>
@@ -54,7 +53,7 @@ const IssueTable = (props) => {
 				<tbody>
 					{issueRows}
 				</tbody>
-			</table>
+			</Table>
 			
 			)
 	}
@@ -178,15 +177,17 @@ export default class IssueList extends React.Component {
 	render() {
 		//console.log('look for search:',this.props.history.push)
 		//console.log('initFilter',this.props.location)
-		console.log('IssueList this.props:',this.props)
+		//console.log('IssueList this.props:',this.props)
 		const initFilter =  queryString.parse(this.props.location.search)
 		return (
 			<div>
-			<IssueFilter setFilter={this.setFilter}
+			<Panel collapsible header="Filter">
+				<IssueFilter setFilter={this.setFilter}
 			initFilter={initFilter}/>
-			<hr/>
+			</Panel>
+
 			<IssueTable issues={this.state.issues} deleteIssue={this.deleteIssue}/>
-			<hr/>
+			
 			<IssueAdd createIssue={this.createIssue}/>
 			</div>
 			)

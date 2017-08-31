@@ -61,16 +61,21 @@ export default class DateInput extends React.Component {
 	}
 
 	render() {
-		const className = (!this.state.valid && !this.state.focused) 
-		? 'invalid' : null
+
+		// const className = (!this.state.valid && !this.state.focused) 
+		// ? 'invalid' : null
 		const value = (this.state.focused || !this.state.valid) 
 		? this.state.value : this.displayFormat(this.props.value);
+		//下面这个主要是为了传递className，使它有Bootstrap的提示效果
+		const childProps = Object.assign({},this.props)
+		//console.log('childProps',childProps.onChange)
+		delete childProps.onValidityChange;//对Input来说不一个invalid 属性
 		//这里只能用displayFormat(this.props.value),因为它需要一个new Date()对象
 		//console.log('DateInput this.props',this.props)
 		//console.log('DateInput this.state',this.state)
 		return (
-			<input type="text" size={15} name={this.props.name}
-			className={className} value={value} 
+			<input 
+			type="text" {...childProps} value = {value}
 			placeholder={'yyyy-mm-dd'}
 			onFocus={this.onFocus} onBlur={this.onBlur}
 			onChange={this.onChange}

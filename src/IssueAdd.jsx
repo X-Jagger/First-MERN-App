@@ -1,4 +1,7 @@
 import React from 'react';
+import {Form,FormControl,Button} from 'react-bootstrap';
+
+//Inline Forms
 export default class IssueAdd extends React.Component {
 	constructor() {
 		super();
@@ -17,14 +20,14 @@ export default class IssueAdd extends React.Component {
 		form.title.value = ''; 
 	}
 	render() {
-		//console.log("test for Add Component!")
 		return (
 			<div>
-				<form name="issueAdd" onSubmit={this.handleSubmit}>
-				<input type="text" name="owner" placeholder="Owner"/>
-				<input type="text" name="title" placeholder="Title"/>
-				<button>Add</button>
-				</form>
+				<Form inline name="issueAdd" onSubmit={this.handleSubmit}>
+					<FormControl  name="owner" placeholder="Owner"></FormControl>{' '}
+					<FormControl  name="title" placeholder="Title"></FormControl>{' '}
+					<Button type="submit" bsStyle="primary">Add</Button>
+				</Form>
+
 			</div>
 			)
 	}
