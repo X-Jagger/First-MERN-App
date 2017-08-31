@@ -1,6 +1,6 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom';
-import {NavItem,Button,ButtonToolbar,Modal,Form,
+import {NavItem,Modal,Form,
 Glyphicon,FormGroup,FormControl,ControlLabel,Button,ButtonToolbar} from 'react-bootstrap';
 import Toast from './Toast.jsx';
 
@@ -44,8 +44,18 @@ class IssueAddNavItem extends React.Component {
 			body:JSON.stringify(newIssue)
 		}).then(response => {
 			if(response.ok) {
+				console.log("this.props",this.props)
 				response.json().then(updateIssue => {
-					this.props.router.push(`/issues/${updateIssue._id}`)
+					//this.props.history.location.pathname = `issues/${updateIssue._id}`;
+					
+					var history = this.props.history;
+					if (history.location.pathname != "/issues") {
+						history.goBack();
+					} 
+					else 
+					history.push(`issues/${updateIssue._id}`)
+
+					//this.props.router.push(`/issues/${updateIssue._id}`)
 				})
 			} else {
 				response.json().then(error => {
@@ -58,10 +68,42 @@ class IssueAddNavItem extends React.Component {
 	}
 	render() {
 		return (
-			
+			<NavItem onClick={this.showModal}>
+			<Glyphicon glyph="plus" />Create Issue
+			<Modal keyboard show={this.state.showing} onHide={this.hideModal} >
+				<Modal.Header closeButton>
+					<Modal.Title>Create Issue</Modal.Title>
+				</Modal.Header>
+				<Modal.Body>
+					<Form name="issueAdd">
+						<FormGroup>
+							<ControlLabel>Title</ControlLabel>
+							<FormControl name="title" autoFocus></FormControl>
+						</FormGroup>
+						<FormGroup>
+							<ControlLabel>Owner</ControlLabel>
+							<FormControl name="owner"></FormControl>
+						</FormGroup>
+					</Form>
+				</Modal.Body>
+				<Modal.Footer>
+					<ButtonToolbar>
+						<Button type="button" bsStyle="primary"
+						onClick={this.submit}>Sumbit</Button>
+						<Button bsStyle="link" onClick={this.hiddenModal}>Cancel</Button>
+					</ButtonToolbar>
+				</Modal.Footer>
+			</Modal>
+			<Toast showing={this.state.toastVisible}
+			message={this.state.toastMessage} 
+			onDismiss={this.dismissToast}
+			byStyle={this.state.toastTypest} ></Toast>
+			</NavItem>
 			)
 	}
 }
+
+export default withRouter(IssueAddNavItem);
 
 // setFilter(query) {
 // 		this.props.history.push({
