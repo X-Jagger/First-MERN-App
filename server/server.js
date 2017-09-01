@@ -45,7 +45,7 @@ app.delete('/api/issues/:id', (req, res) => {
 			_id: issueId
 		})
 		.then(deleteResult => {
-			console.log('deleteResult is:', deleteResult)
+			//console.log('deleteResult is:', deleteResult)
 			if (deleteResult.result.n === 1) { //?
 				res.json({
 					status: 'OK'

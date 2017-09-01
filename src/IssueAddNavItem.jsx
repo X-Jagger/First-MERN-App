@@ -70,7 +70,7 @@ class IssueAddNavItem extends React.Component {
 		return (
 			<NavItem onClick={this.showModal}>
 			<Glyphicon glyph="plus" />Create Issue
-			<Modal keyboard show={this.state.showing} onHide={this.hideModal} >
+			<Modal  show={this.state.showing} onHide={this.hideModal} >
 				<Modal.Header closeButton>
 					<Modal.Title>Create Issue</Modal.Title>
 				</Modal.Header>
@@ -90,7 +90,7 @@ class IssueAddNavItem extends React.Component {
 					<ButtonToolbar>
 						<Button type="button" bsStyle="primary"
 						onClick={this.submit}>Sumbit</Button>
-						<Button bsStyle="link" onClick={this.hiddenModal}>Cancel</Button>
+						<Button bsStyle="link" onClick={this.hideModal}>Cancel</Button>
 					</ButtonToolbar>
 				</Modal.Footer>
 			</Modal>
