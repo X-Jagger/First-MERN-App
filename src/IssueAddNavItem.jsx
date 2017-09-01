@@ -70,7 +70,7 @@ class IssueAddNavItem extends React.Component {
 		return (
 			<NavItem onClick={this.showModal}>
 			<Glyphicon glyph="plus" />Create Issue
-			<Modal  show={this.state.showing} onHide={this.hideModal} >
+			<Modal keyboard show={this.state.showing} onHide={this.hideModal} >
 				<Modal.Header closeButton>
 					<Modal.Title>Create Issue</Modal.Title>
 				</Modal.Header>
